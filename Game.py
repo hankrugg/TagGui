@@ -19,6 +19,7 @@ class Game:
         self.enemies = []
         self.isOver = False
         self.playing = True
+        self.numEnemies = 2
 
     def readyGame(self):
         self.map.drawMap()
@@ -38,8 +39,8 @@ class Game:
     def renderMap(self):
         self.map.resetMap()
         # reset the map to its original state
-        for i in range(5):
-            for j in range(10):
+        for i in range(self.map.rows):
+            for j in range(self.map.columns):
                 if i == self.player.xcoord and j == self.player.ycoord:
                     # place the player on the map
                     self.map.array[i][j] = 'O'
@@ -75,7 +76,7 @@ class Game:
         # clear the enemies list for when the game is restarted
         if len(self.enemies) > 1:
             self.enemies.clear()
-        for i in range(1):
+        for i in range(self.numEnemies):
             x = randint(1, 4)
             y = randint(1, 8)
             # check if its a valid move
@@ -99,6 +100,7 @@ class Game:
                                           enemy.simulateMove(direction)[1],
                                           self.map.array):
                 enemy.move(direction)
+                self.renderMap()
 
 
     def checkKill(self):
@@ -152,6 +154,7 @@ class Game:
         print("there will be enemies that are trying to chase you,")
         print("your goal is to evade them for as long as you can.")
         print("___________________________________________________")
+
 
 
     def getChoice(self, option):
