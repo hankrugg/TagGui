@@ -64,6 +64,7 @@ class Game:
                 self.player.move(direction)
                 self.enemyMove()
                 self.renderMap()
+
             else:
                 print("Invalid move")
         else:
@@ -74,7 +75,7 @@ class Game:
         # clear the enemies list for when the game is restarted
         if len(self.enemies) > 1:
             self.enemies.clear()
-        for i in range(3):
+        for i in range(1):
             x = randint(1, 4)
             y = randint(1, 8)
             # check if its a valid move
@@ -105,7 +106,6 @@ class Game:
             # check if each enemy is on the player which indicates a "kill"
             if enemy.xcoord == self.player.xcoord and enemy.ycoord == self.player.ycoord:
                 # draw the map a final time so the player knows where they died
-                self.map.drawMap()
                 self.isOver = True
                 self.map.resetMap()
 
@@ -127,6 +127,7 @@ class Game:
 
     def resetGame(self):
         self.isOver = False
+        self.enemies.clear()
 
     def showMenu(self):
         print("___________________________________________________")

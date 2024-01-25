@@ -5,6 +5,7 @@
 
 '''
 import tkinter as tk
+from tkinter import messagebox
 from pynput import keyboard
 import sys
 from random import randint
@@ -24,18 +25,12 @@ class Gui(tk.Tk):
         self.canvas = tk.Canvas(self, width=550, height=450)
         self.canvas.pack()
         self.game = Game()
+        self.listener = keyboard.Listener(on_press=self.onPress, )
+        self.listener.start()
 
 
-        ######## Extra Code ##########
-        # self.canvas.create_line(10,10,400,10, fill='black', width=5)
-        # self.canvas.create_line(10,10,10,400, fill='black', width=5)
-        # for i in range(1,self.rows):
-        #     self.canvas.pack()
-        #     self.canvas.create_line(10 ,50*i,410,50*i, fill='black', width=5)
-        # for j in range(1,self.columns):
-        #     self.canvas.create_line(50*j,10,50*j,410, fill='black', width=5)
-
-
+    def setListener(self):
+        self.listener = keyboard.Listener(on_press=self.onPress)
 
     def drawMapOutline(self):
         for i in range(self.columns):
@@ -62,35 +57,52 @@ class Gui(tk.Tk):
                     self.canvas.create_rectangle((50*i), (j*50), 50 +(50*i), 50 + (j*50), fill='red')
 
     def startGame(self):
+        self.game.map.resetMap()
         self.game.placePlayer()
         self.game.placeEnemies()
         self.renderMap()
 
     def makeMove(self, direction):
-        if direction == 'w':
-            self.game.player.move('w')
-            self.renderMap()
-        elif direction == 'a':
-            self.game.player.move('a')
-            self.renderMap()
-        elif direction == 's':
-            self.game.player.move('s')
-            self.renderMap()
-        elif direction == 'd':
-            self.game.player.move('d')
-            self.renderMap()
-        else:
-            print('Invalid')
-        self.game.enemyMove()
+        if direction == 'w' or direction == 's' or direction == 'd' or direction == 'a':
+
+            if self.game.player.checkValidMove(self.game.player.simulateMove(direction)[0],
+                                          self.game.player.simulateMove(direction)[1],
+                                          self.game.map.array):
+                if direction == 'w':
+                    self.game.player.move('w')
+                    self.game.enemyMove()
+                    self.renderMap()
+
+                elif direction == 'a':
+                    self.game.player.move('a')
+                    self.game.enemyMove()
+                    self.renderMap()
+
+
+                elif direction == 's':
+                    self.game.player.move('s')
+                    self.game.enemyMove()
+                    self.renderMap()
+
+                elif direction == 'd':
+                    self.game.player.move('d')
+                    self.game.enemyMove()
+                    self.renderMap()
+                else:
+                    print('Invalid')
+
 
 
 # got help from https://pynput.readthedocs.io/en/latest/keyboard.html
     def onPress(self, key):
         try:
             self.makeMove(key.char)
+            self.game.checkKill()
+            if self.game.isOver:
+                self.game.resetGame()
+                self.startGame()
         except AttributeError:
-            print('special key {0} pressed'.format(
-                key))
+            print('Invalid')
 
 
 
@@ -98,9 +110,4 @@ if __name__ == '__main__':
     app = Gui()
     # app.submitMove()
     app.startGame()
-    for i in range(1):
-        listener = keyboard.Listener(
-            on_press=app.onPress,)
-        listener.start()
-
     app.mainloop()
