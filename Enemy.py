@@ -28,4 +28,3 @@ class Enemy(Player):
                 return "d"
             else:
                 return "a"
-

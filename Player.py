@@ -5,6 +5,7 @@
 
 '''
 
+
 class Player:
     def __init__(self, xcoord, ycoord):
         self.xcoord = xcoord
