@@ -106,7 +106,7 @@ class Gui(tk.Tk):
                 self.renderMap()
                 # sleep so that the map has time to render before the message box is shown
                 time.sleep(0.1)
-                tk.messagebox.showinfo("Game Over", "You lost!")
+                tk.messagebox.showinfo("Game Over", "You lost! Click restart to start a new game.")
         except AttributeError:
             # show a bad choice error if they choose a special key
             tk.messagebox.showerror("Bad Choice", 'Please select a valid move: a,s,w,d!')
