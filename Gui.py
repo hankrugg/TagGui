@@ -118,7 +118,7 @@ class Gui(tk.Tk):
 
     def showInstructions(self):
         # button that shows the directions of the game
-        tk.messagebox.showinfo("Instructions", "Controls:vw: Move up, s: Move down,"
+        tk.messagebox.showinfo("Instructions", "Controls:w: Move up, s: Move down,"
                                                "a: Move right,d: Move left, "
                                                "The goal of the game is to last as long as you can,"
                                                "there will be enemies that are trying to chase you,"
